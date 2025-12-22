@@ -1,0 +1,5 @@
+{
+  "name": "Airline Tycoon",
+  "description": "A simulation game where you build and manage your own airline. Purchase aircraft, open new routes, and grow your fleet to become a major player in the aviation industry.",
+  "requestFramePermissions": []
+}

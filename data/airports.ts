@@ -1,0 +1,116 @@
+import type { Airport } from '../types';
+import { AirportScale } from '../types';
+
+export const AIRPORTS: Airport[] = [
+  // Asia - Korea
+  { code: 'ICN', name: 'Seoul (ICN)', country: 'KR', coordinates: { lat: 37.46, lon: 126.45 }, scale: AirportScale.HUB, slots: 20, runwayLength: 4000 },
+  { code: 'GMP', name: 'Seoul (GMP)', country: 'KR', coordinates: { lat: 37.55, lon: 126.79 }, scale: AirportScale.MAJOR, slots: 25, runwayLength: 3600 },
+  { code: 'PUS', name: 'Busan (PUS)', country: 'KR', coordinates: { lat: 35.17, lon: 128.93 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3200 },
+  { code: 'CJU', name: 'Jeju (CJU)', country: 'KR', coordinates: { lat: 33.51, lon: 126.49 }, scale: AirportScale.MAJOR, slots: 28, runwayLength: 3180 },
+  { code: 'TAE', name: 'Daegu (TAE)', country: 'KR', coordinates: { lat: 35.89, lon: 128.65 }, scale: AirportScale.REGIONAL, slots: 30, runwayLength: 2755 },
+  { code: 'CJJ', name: 'Cheongju (CJJ)', country: 'KR', coordinates: { lat: 36.71, lon: 127.49 }, scale: AirportScale.REGIONAL, slots: 30, runwayLength: 2744 },
+
+  // Asia - Japan
+  { code: 'NRT', name: 'Tokyo (NRT)', country: 'JP', coordinates: { lat: 35.76, lon: 140.38 }, scale: AirportScale.HUB, slots: 18, runwayLength: 4000 },
+  { code: 'HND', name: 'Tokyo (HND)', country: 'JP', coordinates: { lat: 35.55, lon: 139.78 }, scale: AirportScale.HUB, slots: 1, runwayLength: 3360 },
+  { code: 'KIX', name: 'Osaka (KIX)', country: 'JP', coordinates: { lat: 34.43, lon: 135.24 }, scale: AirportScale.HUB, slots: 20, runwayLength: 4000 },
+  { code: 'ITM', name: 'Osaka (ITM)', country: 'JP', coordinates: { lat: 34.78, lon: 135.43 }, scale: AirportScale.MAJOR, slots: 25, runwayLength: 3000 },
+  { code: 'NGO', name: 'Nagoya (NGO)', country: 'JP', coordinates: { lat: 34.85, lon: 136.80 }, scale: AirportScale.HUB, slots: 20, runwayLength: 3500 },
+  { code: 'FUK', name: 'Fukuoka (FUK)', country: 'JP', coordinates: { lat: 33.58, lon: 130.45 }, scale: AirportScale.HUB, slots: 22, runwayLength: 2800 },
+  { code: 'CTS', name: 'Sapporo (CTS)', country: 'JP', coordinates: { lat: 42.77, lon: 141.69 }, scale: AirportScale.HUB, slots: 20, runwayLength: 3000 },
+  { code: 'OKA', name: 'Okinawa (OKA)', country: 'JP', coordinates: { lat: 26.19, lon: 127.64 }, scale: AirportScale.MAJOR, slots: 25, runwayLength: 3000 },
+  
+  // Asia - China
+  { code: 'PEK', name: 'Beijing (PEK)', country: 'CN', coordinates: { lat: 40.08, lon: 116.58 }, scale: AirportScale.MEGA, slots: 14, runwayLength: 3800 },
+  { code: 'PVG', name: 'Shanghai (PVG)', country: 'CN', coordinates: { lat: 31.14, lon: 121.80 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 4000 },
+  { code: 'PKX', name: 'Beijing (PKX)', country: 'CN', coordinates: { lat: 39.50, lon: 116.41 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 4000 },
+  { code: 'SHA', name: 'Shanghai (SHA)', country: 'CN', coordinates: { lat: 31.19, lon: 121.33 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3300 },
+  { code: 'CAN', name: 'Guangzhou (CAN)', country: 'CN', coordinates: { lat: 23.39, lon: 113.29 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3800 },
+  { code: 'CTU', name: 'Chengdu (CTU)', country: 'CN', coordinates: { lat: 30.31, lon: 103.95 }, scale: AirportScale.HUB, slots: 16, runwayLength: 4000 },
+  { code: 'SZX', name: 'Shenzhen (SZX)', country: 'CN', coordinates: { lat: 22.63, lon: 113.81 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3800 },
+  { code: 'XIY', name: 'Xi\'an (XIY)', country: 'CN', coordinates: { lat: 34.44, lon: 108.75 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3800 },
+
+  // Asia - Others
+  { code: 'HKG', name: 'Hong Kong (HKG)', country: 'HK', coordinates: { lat: 22.30, lon: 113.91 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3800 },
+  { code: 'TPE', name: 'Taipei (TPE)', country: 'TW', coordinates: { lat: 25.07, lon: 121.23 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3800 },
+  { code: 'KHH', name: 'Kaohsiung (KHH)', country: 'TW', coordinates: { lat: 22.57, lon: 120.35 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3150 },
+  { code: 'SIN', name: 'Singapore (SIN)', country: 'SG', coordinates: { lat: 1.36, lon: 103.99 }, scale: AirportScale.HUB, slots: 18, runwayLength: 4000 },
+  { code: 'BKK', name: 'Bangkok (BKK)', country: 'TH', coordinates: { lat: 13.69, lon: 100.75 }, scale: AirportScale.MEGA, slots: 20, runwayLength: 4000 },
+  { code: 'DMK', name: 'Bangkok (DMK)', country: 'TH', coordinates: { lat: 13.91, lon: 100.60 }, scale: AirportScale.MAJOR, slots: 25, runwayLength: 3500 },
+  { code: 'HKT', name: 'Phuket (HKT)', country: 'TH', coordinates: { lat: 8.11, lon: 98.31 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3000 },
+  { code: 'CNX', name: 'Chiang Mai (CNX)', country: 'TH', coordinates: { lat: 18.76, lon: 98.96 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3100 },
+  { code: 'SGN', name: 'Ho Chi Minh City (SGN)', country: 'VN', coordinates: { lat: 10.82, lon: 106.66 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3800 },
+  { code: 'HAN', name: 'Hanoi (HAN)', country: 'VN', coordinates: { lat: 21.22, lon: 105.80 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3800 },
+  { code: 'DAD', name: 'Da Nang (DAD)', country: 'VN', coordinates: { lat: 16.04, lon: 108.19 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3048 },
+  { code: 'MNL', name: 'Manila (MNL)', country: 'PH', coordinates: { lat: 14.50, lon: 121.01 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3737 },
+  { code: 'DEL', name: 'Delhi (DEL)', country: 'IN', coordinates: { lat: 28.55, lon: 77.10 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 4430 },
+
+  // Middle East
+  { code: 'DXB', name: 'Dubai (DXB)', country: 'AE', coordinates: { lat: 25.25, lon: 55.36 }, scale: AirportScale.MEGA, slots: 8, runwayLength: 4450 },
+  { code: 'IST', name: 'Istanbul (IST)', country: 'TR', coordinates: { lat: 41.27, lon: 28.75 }, scale: AirportScale.MEGA, slots: 10, runwayLength: 4100 },
+  { code: 'DOH', name: 'Doha (DOH)', country: 'QA', coordinates: { lat: 25.27, lon: 51.60 }, scale: AirportScale.MEGA, slots: 10, runwayLength: 4850 },
+  { code: 'AUH', name: 'Abu Dhabi (AUH)', country: 'AE', coordinates: { lat: 24.43, lon: 54.65 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 4100 },
+  
+  // Americas
+  { code: 'ATL', name: 'Atlanta (ATL)', country: 'US', coordinates: { lat: 33.64, lon: -84.42 }, scale: AirportScale.MEGA, slots: 8, runwayLength: 3776 },
+  { code: 'SFO', name: 'San Francisco (SFO)', country: 'US', coordinates: { lat: 37.62, lon: -122.37 }, scale: AirportScale.HUB, slots: 22, runwayLength: 3618 },
+  { code: 'LAX', name: 'Los Angeles (LAX)', country: 'US', coordinates: { lat: 33.94, lon: -118.40 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 3939 },
+  { code: 'JFK', name: 'New York (JFK)', country: 'US', coordinates: { lat: 40.64, lon: -73.77 }, scale: AirportScale.MEGA, slots: 2, runwayLength: 4442 },
+  { code: 'EWR', name: 'New York (EWR)', country: 'US', coordinates: { lat: 40.69, lon: -74.16 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3353 },
+  { code: 'LGA', name: 'New York (LGA)', country: 'US', coordinates: { lat: 40.77, lon: -73.87 }, scale: AirportScale.MAJOR, slots: 25, runwayLength: 2134 },
+  { code: 'ORD', name: 'Chicago (ORD)', country: 'US', coordinates: { lat: 41.97, lon: -87.90 }, scale: AirportScale.MEGA, slots: 10, runwayLength: 3962 },
+  { code: 'MIA', name: 'Miami (MIA)', country: 'US', coordinates: { lat: 25.79, lon: -80.29 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3962 },
+  { code: 'DFW', name: 'Dallas (DFW)', country: 'US', coordinates: { lat: 32.89, lon: -97.04 }, scale: AirportScale.MEGA, slots: 10, runwayLength: 4084 },
+  { code: 'SEA', name: 'Seattle (SEA)', country: 'US', coordinates: { lat: 47.44, lon: -122.30 }, scale: AirportScale.HUB, slots: 20, runwayLength: 3627 },
+  { code: 'BOS', name: 'Boston (BOS)', country: 'US', coordinates: { lat: 42.36, lon: -71.00 }, scale: AirportScale.HUB, slots: 20, runwayLength: 3050 },
+  { code: 'DEN', name: 'Denver (DEN)', country: 'US', coordinates: { lat: 39.86, lon: -104.67 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 4877 },
+  { code: 'LAS', name: 'Las Vegas (LAS)', country: 'US', coordinates: { lat: 36.08, lon: -115.15 }, scale: AirportScale.HUB, slots: 22, runwayLength: 4423 },
+  { code: 'MCO', name: 'Orlando (MCO)', country: 'US', coordinates: { lat: 28.42, lon: -81.30 }, scale: AirportScale.HUB, slots: 22, runwayLength: 3659 },
+  { code: 'ASE', name: 'Aspen (ASE)', country: 'US', coordinates: { lat: 39.22, lon: -106.86 }, scale: AirportScale.REGIONAL, slots: 30, runwayLength: 2440 },
+  { code: 'YYZ', name: 'Toronto (YYZ)', country: 'CA', coordinates: { lat: 43.67, lon: -79.62 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3368 },
+  { code: 'YVR', name: 'Vancouver (YVR)', country: 'CA', coordinates: { lat: 49.19, lon: -123.18 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3505 },
+  { code: 'YUL', name: 'Montreal (YUL)', country: 'CA', coordinates: { lat: 45.47, lon: -73.74 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3353 },
+  { code: 'YYC', name: 'Calgary (YYC)', country: 'CA', coordinates: { lat: 51.13, lon: -114.02 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 4267 },
+  { code: 'GRU', name: 'Sao Paulo (GRU)', country: 'BR', coordinates: { lat: -23.43, lon: -46.47 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3700 },
+  { code: 'GIG', name: 'Rio de Janeiro (GIG)', country: 'BR', coordinates: { lat: -22.81, lon: -43.25 }, scale: AirportScale.HUB, slots: 16, runwayLength: 4000 },
+  { code: 'MEX', name: 'Mexico City (MEX)', country: 'MX', coordinates: { lat: 19.43, lon: -99.07 }, scale: AirportScale.HUB, slots: 14, runwayLength: 3952 },
+
+  // Europe
+  { code: 'LHR', name: 'London (LHR)', country: 'GB', coordinates: { lat: 51.47, lon: -0.45 }, scale: AirportScale.MEGA, slots: 2, runwayLength: 3902 },
+  { code: 'LGW', name: 'London (LGW)', country: 'GB', coordinates: { lat: 51.15, lon: -0.19 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3316 },
+  { code: 'STN', name: 'London (STN)', country: 'GB', coordinates: { lat: 51.88, lon: 0.23 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3049 },
+  { code: 'MAN', name: 'Manchester (MAN)', country: 'GB', coordinates: { lat: 53.35, lon: -2.27 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3048 },
+  { code: 'EDI', name: 'Edinburgh (EDI)', country: 'GB', coordinates: { lat: 55.95, lon: -3.37 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 2556 },
+  { code: 'LCY', name: 'London (LCY)', country: 'GB', coordinates: { lat: 51.50, lon: 0.05 }, scale: AirportScale.REGIONAL, slots: 30, runwayLength: 1508 },
+  { code: 'CDG', name: 'Paris (CDG)', country: 'FR', coordinates: { lat: 49.00, lon: 2.54 }, scale: AirportScale.MEGA, slots: 10, runwayLength: 4215 },
+  { code: 'ORY', name: 'Paris (ORY)', country: 'FR', coordinates: { lat: 48.72, lon: 2.37 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3650 },
+  { code: 'NCE', name: 'Nice (NCE)', country: 'FR', coordinates: { lat: 43.66, lon: 7.21 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 2960 },
+  { code: 'LYS', name: 'Lyon (LYS)', country: 'FR', coordinates: { lat: 45.72, lon: 5.09 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 4000 },
+  { code: 'FRA', name: 'Frankfurt (FRA)', country: 'DE', coordinates: { lat: 50.03, lon: 8.57 }, scale: AirportScale.MEGA, slots: 10, runwayLength: 4000 },
+  { code: 'MUC', name: 'Munich (MUC)', country: 'DE', coordinates: { lat: 48.35, lon: 11.78 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 4000 },
+  { code: 'BER', name: 'Berlin (BER)', country: 'DE', coordinates: { lat: 52.36, lon: 13.50 }, scale: AirportScale.HUB, slots: 16, runwayLength: 4000 },
+  { code: 'DUS', name: 'Dusseldorf (DUS)', country: 'DE', coordinates: { lat: 51.28, lon: 6.76 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3000 },
+  { code: 'AMS', name: 'Amsterdam (AMS)', country: 'NL', coordinates: { lat: 52.31, lon: 4.76 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 3800 },
+  { code: 'MAD', name: 'Madrid (MAD)', country: 'ES', coordinates: { lat: 40.49, lon: -3.56 }, scale: AirportScale.MEGA, slots: 14, runwayLength: 4350 },
+  { code: 'BCN', name: 'Barcelona (BCN)', country: 'ES', coordinates: { lat: 41.29, lon: 2.07 }, scale: AirportScale.MEGA, slots: 14, runwayLength: 3352 },
+  { code: 'SZG', name: 'Salzburg (SZG)', country: 'AT', coordinates: { lat: 47.79, lon: 13.00 }, scale: AirportScale.REGIONAL, slots: 30, runwayLength: 2750 },
+  { code: 'FCO', name: 'Rome (FCO)', country: 'IT', coordinates: { lat: 41.80, lon: 12.23 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3900 },
+  { code: 'MXP', name: 'Milan (MXP)', country: 'IT', coordinates: { lat: 45.63, lon: 8.72 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3920 },
+  { code: 'FLR', name: 'Florence (FLR)', country: 'IT', coordinates: { lat: 43.81, lon: 11.20 }, scale: AirportScale.REGIONAL, slots: 30, runwayLength: 1750 },
+
+  // Oceania
+  { code: 'SYD', name: 'Sydney (SYD)', country: 'AU', coordinates: { lat: -33.94, lon: 151.17 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3962 },
+  { code: 'MEL', name: 'Melbourne (MEL)', country: 'AU', coordinates: { lat: -37.67, lon: 144.84 }, scale: AirportScale.HUB, slots: 16, runwayLength: 3657 },
+  { code: 'BNE', name: 'Brisbane (BNE)', country: 'AU', coordinates: { lat: -27.38, lon: 153.11 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3560 },
+  { code: 'PER', name: 'Perth (PER)', country: 'AU', coordinates: { lat: -31.94, lon: 115.96 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3444 },
+
+  // Africa
+  { code: 'JNB', name: 'Johannesburg (JNB)', country: 'ZA', coordinates: { lat: -26.13, lon: 28.24 }, scale: AirportScale.HUB, slots: 16, runwayLength: 4418 },
+  { code: 'CPT', name: 'Cape Town (CPT)', country: 'ZA', coordinates: { lat: -33.96, lon: 18.60 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3201 },
+  { code: 'CAI', name: 'Cairo (CAI)', country: 'EG', coordinates: { lat: 30.12, lon: 31.40 }, scale: AirportScale.HUB, slots: 16, runwayLength: 4000 },
+  { code: 'ADD', name: 'Addis Ababa (ADD)', country: 'ET', coordinates: { lat: 8.97, lon: 38.79 }, scale: AirportScale.MEGA, slots: 12, runwayLength: 3800 },
+  { code: 'NBO', name: 'Nairobi (NBO)', country: 'KE', coordinates: { lat: -1.31, lon: 36.92 }, scale: AirportScale.HUB, slots: 18, runwayLength: 4267 },
+  { code: 'LOS', name: 'Lagos (LOS)', country: 'NG', coordinates: { lat: 6.57, lon: 3.32 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3900 },
+  { code: 'CMN', name: 'Casablanca (CMN)', country: 'MA', coordinates: { lat: 33.36, lon: -7.58 }, scale: AirportScale.HUB, slots: 18, runwayLength: 3720 },
+  { code: 'ALG', name: 'Algiers (ALG)', country: 'DZ', coordinates: { lat: 36.69, lon: 3.21 }, scale: AirportScale.MAJOR, slots: 20, runwayLength: 3500 },
+];
