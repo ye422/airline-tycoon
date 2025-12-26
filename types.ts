@@ -25,11 +25,36 @@ export interface Airport {
   runwayLength: number; // in meters
 }
 
+export enum AirportFacilityType {
+  OFFICE = 'OFFICE',
+  MAINTENANCE_CENTER = 'MAINTENANCE_CENTER',
+  GROUND_SERVICES = 'GROUND_SERVICES',
+  FUEL_DEPOT = 'FUEL_DEPOT',
+  CREW_CENTER = 'CREW_CENTER',
+  LOUNGE = 'LOUNGE',
+}
+
+export interface FacilityEffects {
+  operatingCostModifier?: number;        // e.g. 0.95 = 5% reduction
+  maintenanceAccidentModifier?: number;
+  otpBonus?: number;
+  satisfactionBonus?: number;
+  demandModifier?: { first?: number; business?: number; economy?: number };
+}
+
+export interface AirportFacilityData {
+  id: AirportFacilityType;
+  name: string;
+  description: string;
+  cost: Record<AirportScale, number>;
+  effects: FacilityEffects;
+  prerequisite?: AirportFacilityType;
+  icon?: string; // For UI mapping if needed, or handle in component
+}
+
 export interface PlayerAirportFacilities {
   [airportCode: string]: {
-    // loungeLevel: number;
-    // maintenanceHangarLevel: number;
-    // groundServicesLevel: number;
+    facilities: AirportFacilityType[];
   }
 }
 

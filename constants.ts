@@ -1,7 +1,7 @@
 
 
 import type { AircraftModel, Route, AircraftConfiguration, BrandReputation, AirlineConceptData, TicketPriceStrategyData, MaintenanceData, StartingCapitalData, Airport, OnTimePerformanceData, SeatingConfig, ServiceLevelData } from './types';
-import { AircraftConfigurationType, BrandReputationType, AirlineConcept, TicketPriceStrategy, MaintenanceLevel, StartingCapitalLevel, AirportScale, OnTimePerformanceLevel, MealServiceLevel, CrewServiceLevel, BaggageServiceLevel } from './types';
+import { AircraftConfigurationType, BrandReputationType, AirlineConcept, TicketPriceStrategy, MaintenanceLevel, StartingCapitalLevel, AirportScale, OnTimePerformanceLevel, MealServiceLevel, CrewServiceLevel, BaggageServiceLevel, AirportFacilityType, AirportFacilityData } from './types';
 
 export const CONCEPT_CHANGE_COST = 250_000_000_000;
 export const CONCEPT_TRANSITION_YEARS = 2;
@@ -39,85 +39,85 @@ export const ACCIDENT_PENALTY_COST = 100_000_000_000;
 export const CRASH_REPUTATION_DURATION_YEARS = 2;
 
 export const DEMAND_MATRIX = {
-    INTERNATIONAL: {
-        [AirportScale.MEGA]: {
-            [AirportScale.MEGA]: { first: 60, business: 200, economy: 500 },
-            [AirportScale.HUB]: { first: 45, business: 160, economy: 420 },
-            [AirportScale.MAJOR]: { first: 25, business: 100, economy: 350 },
-            [AirportScale.REGIONAL]: { first: 10, business: 40, economy: 200 },
-        },
-        [AirportScale.HUB]: {
-            [AirportScale.MEGA]: { first: 45, business: 160, economy: 420 },
-            [AirportScale.HUB]: { first: 35, business: 130, economy: 380 },
-            [AirportScale.MAJOR]: { first: 20, business: 80, economy: 300 },
-            [AirportScale.REGIONAL]: { first: 8, business: 30, economy: 180 },
-        },
-        [AirportScale.MAJOR]: {
-            [AirportScale.MEGA]: { first: 25, business: 100, economy: 350 },
-            [AirportScale.HUB]: { first: 20, business: 80, economy: 300 },
-            [AirportScale.MAJOR]: { first: 10, business: 40, economy: 250 },
-            [AirportScale.REGIONAL]: { first: 2, business: 15, economy: 150 },
-        },
-        [AirportScale.REGIONAL]: {
-            [AirportScale.MEGA]: { first: 10, business: 40, economy: 200 },
-            [AirportScale.HUB]: { first: 8, business: 30, economy: 180 },
-            [AirportScale.MAJOR]: { first: 2, business: 15, economy: 150 },
-            [AirportScale.REGIONAL]: { first: 0, business: 5, economy: 100 },
-        },
+  INTERNATIONAL: {
+    [AirportScale.MEGA]: {
+      [AirportScale.MEGA]: { first: 60, business: 200, economy: 500 },
+      [AirportScale.HUB]: { first: 45, business: 160, economy: 420 },
+      [AirportScale.MAJOR]: { first: 25, business: 100, economy: 350 },
+      [AirportScale.REGIONAL]: { first: 10, business: 40, economy: 200 },
     },
-    DOMESTIC: {
-        [AirportScale.MEGA]: {
-            [AirportScale.MEGA]: { first: 15, business: 60, economy: 800 },
-            [AirportScale.HUB]: { first: 12, business: 50, economy: 750 },
-            [AirportScale.MAJOR]: { first: 8, business: 40, economy: 650 },
-            [AirportScale.REGIONAL]: { first: 2, business: 20, economy: 450 },
-        },
-        [AirportScale.HUB]: {
-            [AirportScale.MEGA]: { first: 12, business: 50, economy: 750 },
-            [AirportScale.HUB]: { first: 10, business: 45, economy: 700 },
-            [AirportScale.MAJOR]: { first: 6, business: 35, economy: 600 },
-            [AirportScale.REGIONAL]: { first: 1, business: 15, economy: 400 },
-        },
-        [AirportScale.MAJOR]: {
-            [AirportScale.MEGA]: { first: 8, business: 40, economy: 650 },
-            [AirportScale.HUB]: { first: 6, business: 35, economy: 600 },
-            [AirportScale.MAJOR]: { first: 4, business: 25, economy: 500 },
-            [AirportScale.REGIONAL]: { first: 0, business: 10, economy: 350 },
-        },
-        [AirportScale.REGIONAL]: {
-            [AirportScale.MEGA]: { first: 2, business: 20, economy: 450 },
-            [AirportScale.HUB]: { first: 1, business: 15, economy: 400 },
-            [AirportScale.MAJOR]: { first: 0, business: 10, economy: 350 },
-            [AirportScale.REGIONAL]: { first: 0, business: 5, economy: 250 },
-        }
+    [AirportScale.HUB]: {
+      [AirportScale.MEGA]: { first: 45, business: 160, economy: 420 },
+      [AirportScale.HUB]: { first: 35, business: 130, economy: 380 },
+      [AirportScale.MAJOR]: { first: 20, business: 80, economy: 300 },
+      [AirportScale.REGIONAL]: { first: 8, business: 30, economy: 180 },
+    },
+    [AirportScale.MAJOR]: {
+      [AirportScale.MEGA]: { first: 25, business: 100, economy: 350 },
+      [AirportScale.HUB]: { first: 20, business: 80, economy: 300 },
+      [AirportScale.MAJOR]: { first: 10, business: 40, economy: 250 },
+      [AirportScale.REGIONAL]: { first: 2, business: 15, economy: 150 },
+    },
+    [AirportScale.REGIONAL]: {
+      [AirportScale.MEGA]: { first: 10, business: 40, economy: 200 },
+      [AirportScale.HUB]: { first: 8, business: 30, economy: 180 },
+      [AirportScale.MAJOR]: { first: 2, business: 15, economy: 150 },
+      [AirportScale.REGIONAL]: { first: 0, business: 5, economy: 100 },
+    },
+  },
+  DOMESTIC: {
+    [AirportScale.MEGA]: {
+      [AirportScale.MEGA]: { first: 15, business: 60, economy: 800 },
+      [AirportScale.HUB]: { first: 12, business: 50, economy: 750 },
+      [AirportScale.MAJOR]: { first: 8, business: 40, economy: 650 },
+      [AirportScale.REGIONAL]: { first: 2, business: 20, economy: 450 },
+    },
+    [AirportScale.HUB]: {
+      [AirportScale.MEGA]: { first: 12, business: 50, economy: 750 },
+      [AirportScale.HUB]: { first: 10, business: 45, economy: 700 },
+      [AirportScale.MAJOR]: { first: 6, business: 35, economy: 600 },
+      [AirportScale.REGIONAL]: { first: 1, business: 15, economy: 400 },
+    },
+    [AirportScale.MAJOR]: {
+      [AirportScale.MEGA]: { first: 8, business: 40, economy: 650 },
+      [AirportScale.HUB]: { first: 6, business: 35, economy: 600 },
+      [AirportScale.MAJOR]: { first: 4, business: 25, economy: 500 },
+      [AirportScale.REGIONAL]: { first: 0, business: 10, economy: 350 },
+    },
+    [AirportScale.REGIONAL]: {
+      [AirportScale.MEGA]: { first: 2, business: 20, economy: 450 },
+      [AirportScale.HUB]: { first: 1, business: 15, economy: 400 },
+      [AirportScale.MAJOR]: { first: 0, business: 10, economy: 350 },
+      [AirportScale.REGIONAL]: { first: 0, business: 5, economy: 250 },
     }
+  }
 };
 
 export const COMPETITION_MATRIX: Record<AirportScale, Record<AirportScale, 'Low' | 'Medium' | 'High'>> = {
-    [AirportScale.MEGA]: {
-        [AirportScale.MEGA]: 'High',
-        [AirportScale.HUB]: 'High',
-        [AirportScale.MAJOR]: 'Medium',
-        [AirportScale.REGIONAL]: 'Medium',
-    },
-    [AirportScale.HUB]: {
-        [AirportScale.MEGA]: 'High',
-        [AirportScale.HUB]: 'High',
-        [AirportScale.MAJOR]: 'Medium',
-        [AirportScale.REGIONAL]: 'Low',
-    },
-    [AirportScale.MAJOR]: {
-        [AirportScale.MEGA]: 'Medium',
-        [AirportScale.HUB]: 'Medium',
-        [AirportScale.MAJOR]: 'Low',
-        [AirportScale.REGIONAL]: 'Low',
-    },
-    [AirportScale.REGIONAL]: {
-        [AirportScale.MEGA]: 'Medium',
-        [AirportScale.HUB]: 'Low',
-        [AirportScale.MAJOR]: 'Low',
-        [AirportScale.REGIONAL]: 'Low',
-    }
+  [AirportScale.MEGA]: {
+    [AirportScale.MEGA]: 'High',
+    [AirportScale.HUB]: 'High',
+    [AirportScale.MAJOR]: 'Medium',
+    [AirportScale.REGIONAL]: 'Medium',
+  },
+  [AirportScale.HUB]: {
+    [AirportScale.MEGA]: 'High',
+    [AirportScale.HUB]: 'High',
+    [AirportScale.MAJOR]: 'Medium',
+    [AirportScale.REGIONAL]: 'Low',
+  },
+  [AirportScale.MAJOR]: {
+    [AirportScale.MEGA]: 'Medium',
+    [AirportScale.HUB]: 'Medium',
+    [AirportScale.MAJOR]: 'Low',
+    [AirportScale.REGIONAL]: 'Low',
+  },
+  [AirportScale.REGIONAL]: {
+    [AirportScale.MEGA]: 'Medium',
+    [AirportScale.HUB]: 'Low',
+    [AirportScale.MAJOR]: 'Low',
+    [AirportScale.REGIONAL]: 'Low',
+  }
 };
 
 
@@ -133,56 +133,56 @@ export const PASSENGER_SATISFACTION_LEVELS = {
 };
 
 export const ON_TIME_PERFORMANCE_LEVELS: Record<OnTimePerformanceLevel, OnTimePerformanceData> = {
-    [OnTimePerformanceLevel.EXCELLENT]: {
-        id: OnTimePerformanceLevel.EXCELLENT,
-        name: '최상',
-        description: '업계를 선도하는 완벽한 정시 운항률입니다. 승객들의 신뢰가 매우 높습니다.',
-        demandModifier: 1.05,
-        threshold: 98,
-    },
-    [OnTimePerformanceLevel.GOOD]: {
-        id: OnTimePerformanceLevel.GOOD,
-        name: '우수',
-        description: '대부분의 항공편이 정시에 운항합니다. 승객 만족도가 높습니다.',
-        demandModifier: 1.02,
-        threshold: 95,
-    },
-    [OnTimePerformanceLevel.AVERAGE]: {
-        id: OnTimePerformanceLevel.AVERAGE,
-        name: '보통',
-        description: '가끔 사소한 지연이 발생하지만, 전반적으로 안정적입니다.',
-        demandModifier: 1.0,
-        threshold: 90,
-    },
-    [OnTimePerformanceLevel.POOR]: {
-        id: OnTimePerformanceLevel.POOR,
-        name: '나쁨',
-        description: '잦은 지연으로 인해 승객들의 불만이 쌓이고 있습니다.',
-        demandModifier: 0.95,
-        threshold: 80,
-    },
-    [OnTimePerformanceLevel.CRITICAL]: {
-        id: OnTimePerformanceLevel.CRITICAL,
-        name: '심각',
-        description: '만성적인 지연과 결항이 발생합니다. 항공사의 신뢰도가 크게 손상되었습니다.',
-        demandModifier: 0.85,
-        threshold: 0,
-    },
+  [OnTimePerformanceLevel.EXCELLENT]: {
+    id: OnTimePerformanceLevel.EXCELLENT,
+    name: '최상',
+    description: '업계를 선도하는 완벽한 정시 운항률입니다. 승객들의 신뢰가 매우 높습니다.',
+    demandModifier: 1.05,
+    threshold: 98,
+  },
+  [OnTimePerformanceLevel.GOOD]: {
+    id: OnTimePerformanceLevel.GOOD,
+    name: '우수',
+    description: '대부분의 항공편이 정시에 운항합니다. 승객 만족도가 높습니다.',
+    demandModifier: 1.02,
+    threshold: 95,
+  },
+  [OnTimePerformanceLevel.AVERAGE]: {
+    id: OnTimePerformanceLevel.AVERAGE,
+    name: '보통',
+    description: '가끔 사소한 지연이 발생하지만, 전반적으로 안정적입니다.',
+    demandModifier: 1.0,
+    threshold: 90,
+  },
+  [OnTimePerformanceLevel.POOR]: {
+    id: OnTimePerformanceLevel.POOR,
+    name: '나쁨',
+    description: '잦은 지연으로 인해 승객들의 불만이 쌓이고 있습니다.',
+    demandModifier: 0.95,
+    threshold: 80,
+  },
+  [OnTimePerformanceLevel.CRITICAL]: {
+    id: OnTimePerformanceLevel.CRITICAL,
+    name: '심각',
+    description: '만성적인 지연과 결항이 발생합니다. 항공사의 신뢰도가 크게 손상되었습니다.',
+    demandModifier: 0.85,
+    threshold: 0,
+  },
 };
 
 export const OTP_BASE_SCORE = 99.0;
 export const OTP_MAINTENANCE_MODIFIERS: Record<MaintenanceLevel, number> = {
-    [MaintenanceLevel.MINIMAL]: -20.0,
-    [MaintenanceLevel.STANDARD]: 0,
-    [MaintenanceLevel.ADVANCED]: 2.0,
-    [MaintenanceLevel.STATE_OF_THE_ART]: 4.0,
+  [MaintenanceLevel.MINIMAL]: -20.0,
+  [MaintenanceLevel.STANDARD]: 0,
+  [MaintenanceLevel.ADVANCED]: 2.0,
+  [MaintenanceLevel.STATE_OF_THE_ART]: 4.0,
 };
 export const OTP_AGE_PENALTY_PER_YEAR = 0.25;
 export const OTP_AGE_MAINTENANCE_MITIGATION: Record<MaintenanceLevel, number> = {
-    [MaintenanceLevel.MINIMAL]: 0.1,
-    [MaintenanceLevel.STANDARD]: 0.5,
-    [MaintenanceLevel.ADVANCED]: 0.8,
-    [MaintenanceLevel.STATE_OF_THE_ART]: 0.95,
+  [MaintenanceLevel.MINIMAL]: 0.1,
+  [MaintenanceLevel.STANDARD]: 0.5,
+  [MaintenanceLevel.ADVANCED]: 0.8,
+  [MaintenanceLevel.STATE_OF_THE_ART]: 0.95,
 };
 export const OTP_FOREIGN_HUB_BONUS = 0.5;
 export const OTP_FLEET_STRETCH_THRESHOLD = 1.5;
@@ -232,14 +232,14 @@ export const COUNTRIES_DATA: { [key: string]: { name: string; airports: string[]
 };
 
 export const EXISTING_AIRLINE_CODES: string[] = [
-  '3K', '5J', '5W', '5X', '6E', '7C', 'AA', 'AC', 'AD', 'AF', 'AI', 'AK', 
-  'AM', 'AR', 'AS', 'AT', 'AV', 'AY', 'AZ', 'A3', 'BA', 'BG', 'B6', 'BR', 
-  'BT', 'BX', 'CA', 'CI', 'CM', 'C9', 'CX', 'CZ', 'DL', 'DY', 'EI', 'EK', 
-  'ET', 'EW', 'EY', 'F9', 'FR', 'FX', 'GF', 'G4', 'HA', 'HG', 'HX', 'IB', 
-  'IR', 'IT', 'JJ', 'JL', 'JU', 'KA', 'KE', 'KL', 'KU', 'LA', 'LH', 'LJ', 
-  'LO', 'LX', 'ME', 'MH', 'MS', 'MU', 'NH', 'NZ', 'OK', 'OS', 'OZ', 'PD', 
-  'PG', 'PK', 'PR', 'PS', 'QF', 'QR', 'QZ', 'RJ', 'RS', 'SA', 'SK', 'SN', 
-  'SQ', 'SU', 'SV', 'SW', 'TG', 'TK', 'TP', 'TR', 'TS', 'TW', 'U2', 'UA', 
+  '3K', '5J', '5W', '5X', '6E', '7C', 'AA', 'AC', 'AD', 'AF', 'AI', 'AK',
+  'AM', 'AR', 'AS', 'AT', 'AV', 'AY', 'AZ', 'A3', 'BA', 'BG', 'B6', 'BR',
+  'BT', 'BX', 'CA', 'CI', 'CM', 'C9', 'CX', 'CZ', 'DL', 'DY', 'EI', 'EK',
+  'ET', 'EW', 'EY', 'F9', 'FR', 'FX', 'GF', 'G4', 'HA', 'HG', 'HX', 'IB',
+  'IR', 'IT', 'JJ', 'JL', 'JU', 'KA', 'KE', 'KL', 'KU', 'LA', 'LH', 'LJ',
+  'LO', 'LX', 'ME', 'MH', 'MS', 'MU', 'NH', 'NZ', 'OK', 'OS', 'OZ', 'PD',
+  'PG', 'PK', 'PR', 'PS', 'QF', 'QR', 'QZ', 'RJ', 'RS', 'SA', 'SK', 'SN',
+  'SQ', 'SU', 'SV', 'SW', 'TG', 'TK', 'TP', 'TR', 'TS', 'TW', 'U2', 'UA',
   'UL', 'VA', 'VN', 'VX', 'VY', 'W6', 'WS', 'ZE'
 ];
 
@@ -556,7 +556,7 @@ export const BRAND_REPUTATIONS: Record<BrandReputationType, BrandReputation> = {
     description: '항공사 컨셉이 변경되는 과도기입니다. 시장의 인식이 바뀌는 데 시간이 걸립니다.',
     demandModifier: { first: 1.0, business: 1.0, economy: 1.0 }, // This is a placeholder; actual values are interpolated.
   },
-   [BrandReputationType.CRASHED]: {
+  [BrandReputationType.CRASHED]: {
     id: BrandReputationType.CRASHED,
     name: '추락한 항공사',
     description: '치명적인 사고로 인해 항공사의 신뢰도가 바닥으로 떨어졌습니다. 승객들이 외면하고 있습니다.',
@@ -644,125 +644,220 @@ export const TICKET_PRICE_STRATEGIES: Record<TicketPriceStrategy, TicketPriceStr
 };
 
 export const MAINTENANCE_LEVELS: Record<MaintenanceLevel, MaintenanceData> = {
-    [MaintenanceLevel.MINIMAL]: {
-        id: MaintenanceLevel.MINIMAL,
-        name: '최소',
-        description: '서류상으로만 존재하는 정비입니다. 항공기는 사실상 방치되며, 언제 추락해도 이상하지 않은 상태로 운항합니다.',
-        costPerAircraftPerDay: 500_000,
-        accidentModifier: 100.0,
-    },
-    [MaintenanceLevel.STANDARD]: {
-        id: MaintenanceLevel.STANDARD,
-        name: '표준',
-        description: '업계 표준에 따른 정기적인 정비를 수행합니다. 합리적인 비용과 안정성을 제공합니다.',
-        costPerAircraftPerDay: 2_000_000,
-        accidentModifier: 1.0,
-    },
-    [MaintenanceLevel.ADVANCED]: {
-        id: MaintenanceLevel.ADVANCED,
-        name: '고급',
-        description: '예방 정비를 포함한 포괄적인 관리를 제공합니다. 사고 위험을 크게 낮출 수 있습니다.',
-        costPerAircraftPerDay: 5_000_000,
-        accidentModifier: 0.2,
-    },
-    [MaintenanceLevel.STATE_OF_THE_ART]: {
-        id: MaintenanceLevel.STATE_OF_THE_ART,
-        name: '최고급',
-        description: '최신 기술을 이용한 예측 정비로 최상의 안전을 보장합니다. 비용이 매우 높습니다.',
-        costPerAircraftPerDay: 10_000_000,
-        accidentModifier: 0.05,
-    },
+  [MaintenanceLevel.MINIMAL]: {
+    id: MaintenanceLevel.MINIMAL,
+    name: '최소',
+    description: '서류상으로만 존재하는 정비입니다. 항공기는 사실상 방치되며, 언제 추락해도 이상하지 않은 상태로 운항합니다.',
+    costPerAircraftPerDay: 500_000,
+    accidentModifier: 100.0,
+  },
+  [MaintenanceLevel.STANDARD]: {
+    id: MaintenanceLevel.STANDARD,
+    name: '표준',
+    description: '업계 표준에 따른 정기적인 정비를 수행합니다. 합리적인 비용과 안정성을 제공합니다.',
+    costPerAircraftPerDay: 2_000_000,
+    accidentModifier: 1.0,
+  },
+  [MaintenanceLevel.ADVANCED]: {
+    id: MaintenanceLevel.ADVANCED,
+    name: '고급',
+    description: '예방 정비를 포함한 포괄적인 관리를 제공합니다. 사고 위험을 크게 낮출 수 있습니다.',
+    costPerAircraftPerDay: 5_000_000,
+    accidentModifier: 0.2,
+  },
+  [MaintenanceLevel.STATE_OF_THE_ART]: {
+    id: MaintenanceLevel.STATE_OF_THE_ART,
+    name: '최고급',
+    description: '최신 기술을 이용한 예측 정비로 최상의 안전을 보장합니다. 비용이 매우 높습니다.',
+    costPerAircraftPerDay: 10_000_000,
+    accidentModifier: 0.05,
+  },
 };
 
 export const MEAL_SERVICE_LEVELS: Record<MealServiceLevel, ServiceLevelData> = {
-    [MealServiceLevel.NONE]: {
-        id: MealServiceLevel.NONE,
-        name: '서비스 없음',
-        description: '기내식을 제공하지 않아 비용을 극단적으로 절감합니다. LCC/ULCC 전략에 적합합니다.',
-        costPerPassenger: 0,
-        satisfactionPoints: -15,
-    },
-    [MealServiceLevel.SNACKS]: {
-        id: MealServiceLevel.SNACKS,
-        name: '스낵 및 음료',
-        description: '간단한 스낵과 음료만 제공하여 비용을 최소화합니다.',
-        costPerPassenger: 15_000,
-        satisfactionPoints: 0,
-    },
-    [MealServiceLevel.STANDARD]: {
-        id: MealServiceLevel.STANDARD,
-        name: '표준 기내식',
-        description: '노선에 맞는 표준적인 식사를 제공하여 승객 만족도를 유지합니다.',
-        costPerPassenger: 80_000,
-        satisfactionPoints: 10,
-    },
-    [MealServiceLevel.PREMIUM]: {
-        id: MealServiceLevel.PREMIUM,
-        name: '고급 기내식',
-        description: '유명 셰프와 협업한 고급 코스 요리를 제공하여 최상의 경험을 선사합니다.',
-        costPerPassenger: 300_000,
-        satisfactionPoints: 25,
-    },
+  [MealServiceLevel.NONE]: {
+    id: MealServiceLevel.NONE,
+    name: '서비스 없음',
+    description: '기내식을 제공하지 않아 비용을 극단적으로 절감합니다. LCC/ULCC 전략에 적합합니다.',
+    costPerPassenger: 0,
+    satisfactionPoints: -15,
+  },
+  [MealServiceLevel.SNACKS]: {
+    id: MealServiceLevel.SNACKS,
+    name: '스낵 및 음료',
+    description: '간단한 스낵과 음료만 제공하여 비용을 최소화합니다.',
+    costPerPassenger: 15_000,
+    satisfactionPoints: 0,
+  },
+  [MealServiceLevel.STANDARD]: {
+    id: MealServiceLevel.STANDARD,
+    name: '표준 기내식',
+    description: '노선에 맞는 표준적인 식사를 제공하여 승객 만족도를 유지합니다.',
+    costPerPassenger: 80_000,
+    satisfactionPoints: 10,
+  },
+  [MealServiceLevel.PREMIUM]: {
+    id: MealServiceLevel.PREMIUM,
+    name: '고급 기내식',
+    description: '유명 셰프와 협업한 고급 코스 요리를 제공하여 최상의 경험을 선사합니다.',
+    costPerPassenger: 300_000,
+    satisfactionPoints: 25,
+  },
 };
 
 export const CREW_SERVICE_LEVELS: Record<CrewServiceLevel, ServiceLevelData> = {
-    [CrewServiceLevel.SAFETY_ONLY]: {
-        id: CrewServiceLevel.SAFETY_ONLY,
-        name: '안전 전담',
-        description: '객실 승무원은 안전 업무에만 집중하며, 서비스는 최소화됩니다.',
-        costPerAircraftPerDay: 40_000_000,
-        satisfactionPoints: -20,
-    },
-    [CrewServiceLevel.BASIC]: {
-        id: CrewServiceLevel.BASIC,
-        name: '기본 교육',
-        description: '안전 교육에만 집중하여 최소한의 응대 서비스를 제공합니다.',
-        costPerAircraftPerDay: 80_000_000,
-        satisfactionPoints: -5,
-    },
-    [CrewServiceLevel.ATTENTIVE]: {
-        id: CrewServiceLevel.ATTENTIVE,
-        name: '정중한 응대',
-        description: '체계적인 서비스 교육을 통해 정중하고 효율적인 서비스를 제공합니다.',
-        costPerAircraftPerDay: 200_000_000,
-        satisfactionPoints: 15,
-    },
-    [CrewServiceLevel.EXEMPLARY]: {
-        id: CrewServiceLevel.EXEMPLARY,
-        name: '최상급 의전',
-        description: '최고 수준의 의전 교육을 받은 승무원이 승객 한 분 한 분을 세심하게 케어합니다.',
-        costPerAircraftPerDay: 500_000_000,
-        satisfactionPoints: 30,
-    },
+  [CrewServiceLevel.SAFETY_ONLY]: {
+    id: CrewServiceLevel.SAFETY_ONLY,
+    name: '안전 전담',
+    description: '객실 승무원은 안전 업무에만 집중하며, 서비스는 최소화됩니다.',
+    costPerAircraftPerDay: 40_000_000,
+    satisfactionPoints: -20,
+  },
+  [CrewServiceLevel.BASIC]: {
+    id: CrewServiceLevel.BASIC,
+    name: '기본 교육',
+    description: '안전 교육에만 집중하여 최소한의 응대 서비스를 제공합니다.',
+    costPerAircraftPerDay: 80_000_000,
+    satisfactionPoints: -5,
+  },
+  [CrewServiceLevel.ATTENTIVE]: {
+    id: CrewServiceLevel.ATTENTIVE,
+    name: '정중한 응대',
+    description: '체계적인 서비스 교육을 통해 정중하고 효율적인 서비스를 제공합니다.',
+    costPerAircraftPerDay: 200_000_000,
+    satisfactionPoints: 15,
+  },
+  [CrewServiceLevel.EXEMPLARY]: {
+    id: CrewServiceLevel.EXEMPLARY,
+    name: '최상급 의전',
+    description: '최고 수준의 의전 교육을 받은 승무원이 승객 한 분 한 분을 세심하게 케어합니다.',
+    costPerAircraftPerDay: 500_000_000,
+    satisfactionPoints: 30,
+  },
 };
 
 export const BAGGAGE_SERVICE_LEVELS: Record<BaggageServiceLevel, ServiceLevelData> = {
-    [BaggageServiceLevel.PERSONAL_ITEM_ONLY]: {
-        id: BaggageServiceLevel.PERSONAL_ITEM_ONLY,
-        name: '개인 물품만 허용',
-        description: '좌석 밑에 보관 가능한 작은 개인 물품 외 모든 수하물에 높은 요금을 부과합니다.',
-        costPerPassenger: -100_000,
-        satisfactionPoints: -25,
+  [BaggageServiceLevel.PERSONAL_ITEM_ONLY]: {
+    id: BaggageServiceLevel.PERSONAL_ITEM_ONLY,
+    name: '개인 물품만 허용',
+    description: '좌석 밑에 보관 가능한 작은 개인 물품 외 모든 수하물에 높은 요금을 부과합니다.',
+    costPerPassenger: -100_000,
+    satisfactionPoints: -25,
+  },
+  [BaggageServiceLevel.PAID_CARRY_ON]: {
+    id: BaggageServiceLevel.PAID_CARRY_ON,
+    name: '유료 수하물',
+    description: '모든 수하물에 요금을 부과하여 부가 수익을 창출하고 기본 운임을 낮춥니다.',
+    costPerPassenger: -50_000,
+    satisfactionPoints: -10,
+  },
+  [BaggageServiceLevel.FREE_CHECKED_ONE]: {
+    id: BaggageServiceLevel.FREE_CHECKED_ONE,
+    name: '무료 위탁 1개',
+    description: '표준적인 1개의 무료 위탁 수하물을 허용하여 승객 편의를 보장합니다.',
+    costPerPassenger: 40_000,
+    satisfactionPoints: 10,
+  },
+  [BaggageServiceLevel.GENEROUS]: {
+    id: BaggageServiceLevel.GENEROUS,
+    name: '넉넉한 허용량',
+    description: '여러 개의 위탁 수하물을 무료로 허용하여 프리미엄 고객에게 최고의 편의를 제공합니다.',
+    costPerPassenger: 120_000,
+    satisfactionPoints: 20,
+  },
+};
+
+export const AIRPORT_FACILITIES: Record<AirportFacilityType, AirportFacilityData> = {
+  [AirportFacilityType.OFFICE]: {
+    id: AirportFacilityType.OFFICE,
+    name: '사무소',
+    description: '공항 내 기본적인 사무 공간입니다. 해당 공항을 기점으로 하는 노선의 운영 효율을 높여 비용을 절감합니다.',
+    cost: {
+      [AirportScale.MEGA]: HUB_ESTABLISHMENT_COST[AirportScale.MEGA],
+      [AirportScale.HUB]: HUB_ESTABLISHMENT_COST[AirportScale.HUB],
+      [AirportScale.MAJOR]: HUB_ESTABLISHMENT_COST[AirportScale.MAJOR],
+      [AirportScale.REGIONAL]: HUB_ESTABLISHMENT_COST[AirportScale.REGIONAL],
     },
-    [BaggageServiceLevel.PAID_CARRY_ON]: {
-        id: BaggageServiceLevel.PAID_CARRY_ON,
-        name: '유료 수하물',
-        description: '모든 수하물에 요금을 부과하여 부가 수익을 창출하고 기본 운임을 낮춥니다.',
-        costPerPassenger: -50_000,
-        satisfactionPoints: -10,
+    effects: {
+      operatingCostModifier: 0.97, // 3% reduction
+    }
+  },
+  [AirportFacilityType.MAINTENANCE_CENTER]: {
+    id: AirportFacilityType.MAINTENANCE_CENTER,
+    name: '정비 센터',
+    description: '자체 정비 시설을 갖추어 사고 위험을 줄이고 정시 운항률을 개선합니다.',
+    cost: {
+      [AirportScale.MEGA]: 500_000_000_000,
+      [AirportScale.HUB]: 300_000_000_000,
+      [AirportScale.MAJOR]: 150_000_000_000,
+      [AirportScale.REGIONAL]: 50_000_000_000,
     },
-    [BaggageServiceLevel.FREE_CHECKED_ONE]: {
-        id: BaggageServiceLevel.FREE_CHECKED_ONE,
-        name: '무료 위탁 1개',
-        description: '표준적인 1개의 무료 위탁 수하물을 허용하여 승객 편의를 보장합니다.',
-        costPerPassenger: 40_000,
-        satisfactionPoints: 10,
+    effects: {
+      maintenanceAccidentModifier: 0.9, // 10% reduction in accident probability
+      otpBonus: 1.0, // +1% OTP
     },
-    [BaggageServiceLevel.GENEROUS]: {
-        id: BaggageServiceLevel.GENEROUS,
-        name: '넉넉한 허용량',
-        description: '여러 개의 위탁 수하물을 무료로 허용하여 프리미엄 고객에게 최고의 편의를 제공합니다.',
-        costPerPassenger: 120_000,
-        satisfactionPoints: 20,
+    prerequisite: AirportFacilityType.OFFICE,
+  },
+  [AirportFacilityType.GROUND_SERVICES]: {
+    id: AirportFacilityType.GROUND_SERVICES,
+    name: '그라운드 서비스 센터',
+    description: '지상 조업을 직접 관리하여 비용을 절감하고 신속한 수속을 돕습니다.',
+    cost: {
+      [AirportScale.MEGA]: 800_000_000_000,
+      [AirportScale.HUB]: 500_000_000_000,
+      [AirportScale.MAJOR]: 250_000_000_000,
+      [AirportScale.REGIONAL]: 100_000_000_000,
     },
+    effects: {
+      operatingCostModifier: 0.95, // 5% reduction
+      otpBonus: 0.5, // +0.5% OTP
+    },
+    prerequisite: AirportFacilityType.OFFICE,
+  },
+  [AirportFacilityType.FUEL_DEPOT]: {
+    id: AirportFacilityType.FUEL_DEPOT,
+    name: '연료 저장소',
+    description: '대량의 항공유를 비축하고 저렴하게 공급하여 운항 비용을 크게 절감합니다.',
+    cost: {
+      [AirportScale.MEGA]: 1_000_000_000_000,
+      [AirportScale.HUB]: 700_000_000_000,
+      [AirportScale.MAJOR]: 350_000_000_000,
+      [AirportScale.REGIONAL]: 150_000_000_000,
+    },
+    effects: {
+      operatingCostModifier: 0.95, // 5% reduction
+    },
+    prerequisite: AirportFacilityType.OFFICE,
+  },
+  [AirportFacilityType.CREW_CENTER]: {
+    id: AirportFacilityType.CREW_CENTER,
+    name: '승무원 센터',
+    description: '승무원들의 휴식과 교육을 지원하여 서비스 품질을 높이고 효율적인 인력 운용을 돕습니다.',
+    cost: {
+      [AirportScale.MEGA]: 600_000_000_000,
+      [AirportScale.HUB]: 400_000_000_000,
+      [AirportScale.MAJOR]: 200_000_000_000,
+      [AirportScale.REGIONAL]: 80_000_000_000,
+    },
+    effects: {
+      satisfactionBonus: 3, // +3 Satisfaction
+      operatingCostModifier: 0.98, // 2% reduction (efficiency)
+    },
+    prerequisite: AirportFacilityType.OFFICE,
+  },
+  [AirportFacilityType.LOUNGE]: {
+    id: AirportFacilityType.LOUNGE,
+    name: '프리미엄 라운지',
+    description: '상위 클래스 승객을 위한 고급 라운지입니다. 프리미엄 고객 수요를 창출합니다.',
+    cost: {
+      [AirportScale.MEGA]: 400_000_000_000,
+      [AirportScale.HUB]: 250_000_000_000,
+      [AirportScale.MAJOR]: 120_000_000_000,
+      [AirportScale.REGIONAL]: 50_000_000_000,
+    },
+    effects: {
+      demandModifier: { first: 1.05, business: 1.05 }, // 5% increase in premium demand
+    },
+    prerequisite: AirportFacilityType.OFFICE,
+  },
 };

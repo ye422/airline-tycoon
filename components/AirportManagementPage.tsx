@@ -4,20 +4,24 @@ import { AirportScale } from '../types';
 import { COUNTRIES_DATA, HUB_ESTABLISHMENT_COST, FOREIGN_HUB_ESTABLISHMENT_COST } from '../constants';
 import { Building2, Search, Star, PlusCircle } from 'lucide-react';
 import { getAirportCode, formatCurrency } from '../utils/formatters';
+import AirportDetailPanel from './AirportDetailPanel';
+import { AirportFacilityType } from '../types';
 
 interface AirportManagementPageProps {
   gameState: GameState;
   onEstablishHub: (airportCode: string) => void;
+  onPurchaseFacility?: (airportCode: string, facilityType: AirportFacilityType) => void;
 }
 
-const AirportCard: React.FC<{ 
-    airport: Airport; 
-    isHub: boolean; 
-    usedSlots: number;
-    establishmentCost: number;
-    canAfford: boolean;
-    onEstablishHub: () => void;
-}> = ({ airport, isHub, usedSlots, establishmentCost, canAfford, onEstablishHub }) => {
+const AirportCard: React.FC<{
+  airport: Airport;
+  isHub: boolean;
+  usedSlots: number;
+  establishmentCost: number;
+  canAfford: boolean;
+  onEstablishHub: () => void;
+  onManage: () => void;
+}> = ({ airport, isHub, usedSlots, establishmentCost, canAfford, onEstablishHub, onManage }) => {
   const scaleInfo = {
     [AirportScale.REGIONAL]: { text: '소형', color: 'bg-gray-500' },
     [AirportScale.MAJOR]: { text: '중형', color: 'bg-blue-500' },
@@ -43,26 +47,37 @@ const AirportCard: React.FC<{
           <div><span className="font-semibold">활주로:</span> {airport.runwayLength.toLocaleString()}m</div>
         </div>
       </div>
-      {!isHub && (
+      {!isHub ? (
         <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-600">
-            <button
-                onClick={onEstablishHub}
-                disabled={!canAfford}
-                className="w-full flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-white bg-brand-blue-600 rounded-md hover:bg-brand-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
-            >
-                <PlusCircle size={16} className="mr-2"/>
-                거점 설립 ({formatCurrency(establishmentCost)})
-            </button>
+          <button
+            onClick={onEstablishHub}
+            disabled={!canAfford}
+            className="w-full flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-white bg-brand-blue-600 rounded-md hover:bg-brand-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
+          >
+            <PlusCircle size={16} className="mr-2" />
+            거점 설립 ({formatCurrency(establishmentCost)})
+          </button>
+        </div>
+      ) : (
+        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-600">
+          <button
+            onClick={onManage}
+            className="w-full flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-brand-blue-600 bg-brand-blue-50 border border-brand-blue-200 rounded-md hover:bg-brand-blue-100 dark:bg-slate-700 dark:text-brand-blue-400 dark:border-transparent dark:hover:bg-slate-600 transition-colors"
+          >
+            <Building2 size={16} className="mr-2" />
+            시설 관리
+          </button>
         </div>
       )}
     </div>
   );
 };
 
-const AirportManagementPage: React.FC<AirportManagementPageProps> = ({ gameState, onEstablishHub }) => {
+const AirportManagementPage: React.FC<AirportManagementPageProps> = ({ gameState, onEstablishHub, onPurchaseFacility }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [countryFilter, setCountryFilter] = useState('All');
   const [scaleFilter, setScaleFilter] = useState<AirportScale | 'All'>('All');
+  const [selectedAirport, setSelectedAirport] = useState<Airport | null>(null);
 
   const { airlineProfile, routes, airports } = gameState;
   const hubs = airlineProfile?.hubs || [];
@@ -72,18 +87,18 @@ const AirportManagementPage: React.FC<AirportManagementPageProps> = ({ gameState
 
     const openedRoutes = routes.filter(r => r.isOpened);
     const foreignDestinationCodes = new Set<string>();
-    
+
     openedRoutes.forEach(route => {
-        const destCode = getAirportCode(route.destination);
-        const destAirport = destCode ? airports.find(a => a.code === destCode) : null;
-        if (destAirport && destAirport.country !== airlineProfile.country) {
-            foreignDestinationCodes.add(destAirport.code);
-        }
+      const destCode = getAirportCode(route.destination);
+      const destAirport = destCode ? airports.find(a => a.code === destCode) : null;
+      if (destAirport && destAirport.country !== airlineProfile.country) {
+        foreignDestinationCodes.add(destAirport.code);
+      }
     });
-    
+
     const airportCodesToShow = new Set<string>([...hubs, ...Array.from(foreignDestinationCodes)]);
 
-    return airports.filter(airport => 
+    return airports.filter(airport =>
       airportCodesToShow.has(airport.code) || airport.country === airlineProfile.country
     );
   }, [airlineProfile, routes, hubs, airports]);
@@ -117,7 +132,7 @@ const AirportManagementPage: React.FC<AirportManagementPageProps> = ({ gameState
       return matchesQuery && matchesCountry && matchesScale;
     });
   }, [searchQuery, countryFilter, scaleFilter, displayableAirports]);
-  
+
   const scaleFilterOptions = {
     [AirportScale.REGIONAL]: '소형',
     [AirportScale.MAJOR]: '중형',
@@ -164,7 +179,7 @@ const AirportManagementPage: React.FC<AirportManagementPageProps> = ({ gameState
             </select>
           </div>
           <div>
-             <label htmlFor="scale-filter" className="sr-only">규모</label>
+            <label htmlFor="scale-filter" className="sr-only">규모</label>
             <select
               id="scale-filter"
               value={scaleFilter}
@@ -197,10 +212,20 @@ const AirportManagementPage: React.FC<AirportManagementPageProps> = ({ gameState
               establishmentCost={cost}
               canAfford={canAfford}
               onEstablishHub={() => onEstablishHub(airport.code)}
+              onManage={() => setSelectedAirport(airport)}
             />
           );
         })}
       </div>
+
+      {selectedAirport && onPurchaseFacility && (
+        <AirportDetailPanel
+          airport={selectedAirport}
+          gameState={gameState}
+          onClose={() => setSelectedAirport(null)}
+          onPurchaseFacility={onPurchaseFacility}
+        />
+      )}
     </div>
   );
 };

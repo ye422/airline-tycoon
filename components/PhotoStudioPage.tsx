@@ -61,11 +61,11 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
   const { fleet, airlineProfile } = gameState;
   const [selectedModelId, setSelectedModelId] = useState<string>('');
   const [selectedSceneId, setSelectedSceneId] = useState<string>(SCENES[0].id);
-  
+
   // Fuselage State
   const [fuselageFinish, setFuselageFinish] = useState<'paint' | 'metallic'>('paint');
   const [selectedFuselageColorId, setSelectedFuselageColorId] = useState<string>(FUSELAGE_COLORS[0].id);
-  
+
   const [selectedLiveryColorId, setSelectedLiveryColorId] = useState<string>(LIVERY_COLORS[0].id);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -102,15 +102,15 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
       }
 
       const visualTraits = AIRCRAFT_VISUAL_TRAITS[modelInfo.id] || '';
-      
+
       // Define fuselage texture/finish based on selection
-      const fuselageDesc = fuselageFinish === 'metallic' 
-        ? 'highly polished bare aluminum fuselage with mirror-like chrome finish, vintage airliner style' 
+      const fuselageDesc = fuselageFinish === 'metallic'
+        ? 'highly polished bare aluminum fuselage with mirror-like chrome finish, vintage airliner style'
         : `${fuselageInfo.id.toLowerCase()} painted fuselage`;
 
       const prompt = `A high-quality, photorealistic wide shot of a ${modelInfo.name} passenger aircraft owned by '${airlineProfile.name}'. The aircraft is ${visualTraits}. The text '${airlineProfile.name}' (written in English Romanized letters) is clearly and prominently painted on the side of the ${fuselageDesc}. The aircraft livery features distinct ${liveryInfo.id.toLowerCase()} stripes, tail logo, and accents. The aircraft is ${sceneInfo.prompt}. 8k resolution, highly detailed texture, cinematic lighting, realistic aviation photography.`;
 
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
@@ -172,12 +172,12 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
         {/* Controls */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 flex flex-col lg:overflow-y-auto">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6 border-b border-slate-200 dark:border-slate-700 pb-2">촬영 설정</h3>
-          
+
           <div className="space-y-6 flex-grow">
             {/* Model Selection */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">기종 선택</label>
-              <select 
+              <select
                 value={selectedModelId}
                 onChange={(e) => setSelectedModelId(e.target.value)}
                 className="w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue-500 focus:border-brand-blue-500"
@@ -196,11 +196,10 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                   <button
                     key={scene.id}
                     onClick={() => setSelectedSceneId(scene.id)}
-                    className={`px-3 py-2 text-sm rounded-md text-left transition-colors ${
-                      selectedSceneId === scene.id
+                    className={`px-3 py-2 text-sm rounded-md text-left transition-colors ${selectedSceneId === scene.id
                         ? 'bg-brand-blue-600 text-white'
                         : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600'
-                    }`}
+                      }`}
                   >
                     {scene.name}
                   </button>
@@ -211,57 +210,54 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
             {/* Fuselage Finish & Color */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">동체 마감 (Fuselage)</label>
-              
+
               {/* Finish Toggle */}
               <div className="flex bg-slate-100 dark:bg-slate-700 rounded-lg p-1 mb-3">
                 <button
-                    onClick={() => setFuselageFinish('paint')}
-                    className={`flex-1 flex items-center justify-center py-1.5 text-sm font-medium rounded-md transition-all ${
-                        fuselageFinish === 'paint'
-                            ? 'bg-white dark:bg-slate-600 text-brand-blue-600 dark:text-brand-blue-400 shadow-sm'
-                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                  onClick={() => setFuselageFinish('paint')}
+                  className={`flex-1 flex items-center justify-center py-1.5 text-sm font-medium rounded-md transition-all ${fuselageFinish === 'paint'
+                      ? 'bg-white dark:bg-slate-600 text-brand-blue-600 dark:text-brand-blue-400 shadow-sm'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                 >
-                    <Palette size={14} className="mr-1.5" />
-                    일반 도색
+                  <Palette size={14} className="mr-1.5" />
+                  일반 도색
                 </button>
                 <button
-                    onClick={() => setFuselageFinish('metallic')}
-                    className={`flex-1 flex items-center justify-center py-1.5 text-sm font-medium rounded-md transition-all ${
-                        fuselageFinish === 'metallic'
-                            ? 'bg-white dark:bg-slate-600 text-amber-600 dark:text-amber-400 shadow-sm'
-                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                  onClick={() => setFuselageFinish('metallic')}
+                  className={`flex-1 flex items-center justify-center py-1.5 text-sm font-medium rounded-md transition-all ${fuselageFinish === 'metallic'
+                      ? 'bg-white dark:bg-slate-600 text-amber-600 dark:text-amber-400 shadow-sm'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                 >
-                    <Sparkles size={14} className="mr-1.5" />
-                    광택 메탈
+                  <Sparkles size={14} className="mr-1.5" />
+                  광택 메탈
                 </button>
               </div>
 
               {/* Color Selection (Only for Paint) */}
               {fuselageFinish === 'paint' ? (
                 <div className="flex flex-wrap gap-2 animate-fade-in">
-                    {FUSELAGE_COLORS.map(color => (
+                  {FUSELAGE_COLORS.map(color => (
                     <button
-                        key={color.id}
-                        onClick={() => setSelectedFuselageColorId(color.id)}
-                        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform hover:scale-110 ${
-                        selectedFuselageColorId === color.id 
-                            ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-transparent' 
-                            : color.border
+                      key={color.id}
+                      onClick={() => setSelectedFuselageColorId(color.id)}
+                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform hover:scale-110 ${selectedFuselageColorId === color.id
+                          ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-transparent'
+                          : color.border
                         }`}
-                        style={{ backgroundColor: color.hex }}
-                        title={color.name}
-                        aria-label={color.name}
+                      style={{ backgroundColor: color.hex }}
+                      title={color.name}
+                      aria-label={color.name}
                     >
                     </button>
-                    ))}
+                  ))}
                 </div>
               ) : (
-                  <div className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-md border border-slate-200 dark:border-slate-600 text-center animate-fade-in">
-                      <div className="w-full h-8 bg-gradient-to-r from-slate-300 via-white to-slate-300 rounded mb-2 opacity-80"></div>
-                      <p className="text-xs text-slate-600 dark:text-slate-300">알루미늄 본연의 광택을 살린 클래식한 마감입니다.</p>
-                  </div>
+                <div className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-md border border-slate-200 dark:border-slate-600 text-center animate-fade-in">
+                  <div className="w-full h-8 bg-gradient-to-r from-slate-300 via-white to-slate-300 rounded mb-2 opacity-80"></div>
+                  <p className="text-xs text-slate-600 dark:text-slate-300">알루미늄 본연의 광택을 살린 클래식한 마감입니다.</p>
+                </div>
               )}
             </div>
 
@@ -273,11 +269,10 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                   <button
                     key={color.id}
                     onClick={() => setSelectedLiveryColorId(color.id)}
-                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform hover:scale-110 ${
-                      selectedLiveryColorId === color.id 
-                        ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-slate-600 dark:border-white' 
+                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform hover:scale-110 ${selectedLiveryColorId === color.id
+                        ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-slate-600 dark:border-white'
                         : 'border-transparent'
-                    }`}
+                      }`}
                     style={{ backgroundColor: color.hex }}
                     title={color.name}
                     aria-label={color.name}
@@ -311,43 +306,43 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
 
         {/* Viewport */}
         <div className="lg:col-span-2 bg-black rounded-lg shadow-md relative overflow-hidden flex items-center justify-center min-h-[400px] lg:min-h-full">
-            {generatedImage ? (
-                <div className="relative w-full h-full flex items-center justify-center group">
-                    <img src={generatedImage} alt="Generated Aircraft" className="max-w-full max-h-full object-contain" />
-                    <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                         <a href={generatedImage} download={`airline_photo_${Date.now()}.png`} className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full hover:bg-white/30 transition-colors">
-                            <Download className="w-4 h-4 mr-2" /> 저장
-                         </a>
+          {generatedImage ? (
+            <div className="relative w-full h-full flex items-center justify-center group">
+              <img src={generatedImage} alt="Generated Aircraft" className="max-w-full max-h-full object-contain" />
+              <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <a href={generatedImage} download={`airline_photo_${Date.now()}.png`} className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full hover:bg-white/30 transition-colors">
+                  <Download className="w-4 h-4 mr-2" /> 저장
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center p-8">
+              {isGenerating ? (
+                <div className="flex flex-col items-center text-slate-400">
+                  <div className="w-16 h-16 border-4 border-slate-600 border-t-brand-blue-500 rounded-full animate-spin mb-4"></div>
+                  <p>AI가 사진을 현상하고 있습니다...</p>
+                  <p className="text-xs text-slate-600 mt-2">잠시만 기다려주세요.</p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center text-slate-600">
+                  <ImageIcon className="w-20 h-20 mb-4 opacity-50" />
+                  <p className="text-lg font-semibold">미리보기</p>
+                  <p className="text-sm mt-1">왼쪽 패널에서 설정을 완료하고 촬영 버튼을 눌러주세요.</p>
+                  {error && (
+                    <div className="mt-4 p-3 bg-red-900/50 text-red-200 rounded-md text-sm">
+                      {error}
                     </div>
+                  )}
                 </div>
-            ) : (
-                <div className="text-center p-8">
-                    {isGenerating ? (
-                         <div className="flex flex-col items-center text-slate-400">
-                            <div className="w-16 h-16 border-4 border-slate-600 border-t-brand-blue-500 rounded-full animate-spin mb-4"></div>
-                            <p>AI가 사진을 현상하고 있습니다...</p>
-                            <p className="text-xs text-slate-600 mt-2">잠시만 기다려주세요.</p>
-                         </div>
-                    ) : (
-                        <div className="flex flex-col items-center text-slate-600">
-                            <ImageIcon className="w-20 h-20 mb-4 opacity-50" />
-                            <p className="text-lg font-semibold">미리보기</p>
-                            <p className="text-sm mt-1">왼쪽 패널에서 설정을 완료하고 촬영 버튼을 눌러주세요.</p>
-                            {error && (
-                                <div className="mt-4 p-3 bg-red-900/50 text-red-200 rounded-md text-sm">
-                                    {error}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
-             {/* Overlay details */}
-             {generatedImage && !isGenerating && (
-                 <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-sm rounded text-white text-xs font-mono">
-                     {AIRCRAFT_MODELS.find(m => m.id === selectedModelId)?.name} • {SCENES.find(s => s.id === selectedSceneId)?.name}
-                 </div>
-             )}
+              )}
+            </div>
+          )}
+          {/* Overlay details */}
+          {generatedImage && !isGenerating && (
+            <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-sm rounded text-white text-xs font-mono">
+              {AIRCRAFT_MODELS.find(m => m.id === selectedModelId)?.name} • {SCENES.find(s => s.id === selectedSceneId)?.name}
+            </div>
+          )}
         </div>
       </div>
       <style>{`
