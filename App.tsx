@@ -53,8 +53,8 @@ const App: React.FC = () => {
       case 'aircraftManagement':
         return <AircraftManagementPage
           gameState={gameState}
-          onPurchaseAircraft={actions.handlePurchaseAircraft}
-          onLeaseAircraft={actions.handleLeaseAircraft}
+          onPurchaseAircraft={(modelId, configId, nickname, base) => actions.handlePurchaseAircraft(modelId, configId, nickname, base, () => setCurrentView('main'))}
+          onLeaseAircraft={(modelId, configId, nickname, base) => actions.handleLeaseAircraft(modelId, configId, nickname, base, () => setCurrentView('main'))}
           onLevelChange={actions.handleMaintenanceLevelChange}
           onSellAircraft={actions.handleSellAircraft}
           onReturnLease={actions.handleReturnLease}

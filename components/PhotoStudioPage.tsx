@@ -3,7 +3,8 @@ import React, { useState, useMemo } from 'react';
 import { GoogleGenAI, Modality } from "@google/genai";
 import type { GameState, PlayerAircraft } from '../types';
 import { AIRCRAFT_MODELS } from '../constants';
-import { Camera, Image as ImageIcon, Loader2, Download, Palette, Sparkles } from 'lucide-react';
+import { Camera, Image as ImageIcon, Loader2, Download, Palette, Sparkles, Key, Settings } from 'lucide-react';
+import { getStoredApiKey, setStoredApiKey, clearStoredApiKey } from '../utils/apiStorage';
 
 interface PhotoStudioPageProps {
   gameState: GameState;
@@ -71,6 +72,26 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // API Key State
+  const [apiKey, setApiKey] = useState<string>(() => {
+    return getStoredApiKey() || import.meta.env.VITE_GEMINI_API_KEY || '';
+  });
+  const [inputKey, setInputKey] = useState('');
+  const [showKeySettings, setShowKeySettings] = useState(false);
+
+  const handleSaveKey = () => {
+    if (!inputKey.trim()) return;
+    setStoredApiKey(inputKey.trim());
+    setApiKey(inputKey.trim());
+    setInputKey('');
+  };
+
+  const handleClearKey = () => {
+    clearStoredApiKey();
+    setApiKey('');
+    setShowKeySettings(false);
+  };
+
   // Get unique aircraft models owned by the player
   const ownedModels = useMemo(() => {
     const modelIds = new Set(fleet.map(ac => ac.modelId));
@@ -85,7 +106,7 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
   }, [ownedModels, selectedModelId]);
 
   const handleGenerate = async () => {
-    if (!selectedModelId || !airlineProfile) return;
+    if (!selectedModelId || !airlineProfile || !apiKey) return;
 
     setIsGenerating(true);
     setError(null);
@@ -110,7 +131,7 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
 
       const prompt = `A high-quality, photorealistic wide shot of a ${modelInfo.name} passenger aircraft owned by '${airlineProfile.name}'. The aircraft is ${visualTraits}. The text '${airlineProfile.name}' (written in English Romanized letters) is clearly and prominently painted on the side of the ${fuselageDesc}. The aircraft livery features distinct ${liveryInfo.id.toLowerCase()} stripes, tail logo, and accents. The aircraft is ${sceneInfo.prompt}. 8k resolution, highly detailed texture, cinematic lighting, realistic aviation photography.`;
 
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
@@ -140,11 +161,56 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
 
     } catch (err) {
       console.error("Image generation failed:", err);
-      setError("이미지 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      setError("비행기 사진을 인화하는 중 문제가 발생했습니다. (API 키를 확인해주거나 잠시 후 다시 시도)");
     } finally {
       setIsGenerating(false);
     }
   };
+
+  if (!apiKey) {
+    return (
+      <div className="mt-6 flex flex-col items-center justify-center h-[60vh] bg-white dark:bg-slate-800 rounded-lg shadow-md p-8 md:p-12 text-center max-w-2xl mx-auto border border-slate-200 dark:border-slate-700">
+        <div className="w-20 h-20 bg-brand-blue-100 dark:bg-brand-blue-900/30 rounded-full flex items-center justify-center mb-6">
+          <Key className="w-10 h-10 text-brand-blue-600 dark:text-brand-blue-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">API 키 설정이 필요합니다</h2>
+        <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+          포토 스튜디오는 <strong>Google Gemini AI</strong>를 사용하여 고품질의 항공기 이미지를 생성합니다.<br />
+          이미지 생성을 위해 개인 API 키가 필요합니다.<br />
+          <span className="text-sm text-slate-500">(키는 브라우저에만 저장되며 서버로 전송되지 않습니다)</span>
+        </p>
+
+        <div className="w-full max-w-md space-y-4">
+          <div>
+            <label className="block text-left text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Google AI Studio API Key</label>
+            <input
+              type="password"
+              placeholder="YOUR_API_KEY_HERE"
+              value={inputKey}
+              onChange={(e) => setInputKey(e.target.value)}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-blue-500 focus:outline-none transition-all"
+            />
+          </div>
+          <button
+            onClick={handleSaveKey}
+            disabled={!inputKey.trim()}
+            className="w-full py-3 bg-brand-blue-600 hover:bg-brand-blue-700 text-white font-bold rounded-lg shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            시작하기
+          </button>
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 w-full">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            API 키가 없으신가요?
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-brand-blue-600 dark:text-brand-blue-400 hover:underline ml-1 font-medium">
+              여기서 무료로 발급받으세요
+            </a>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (ownedModels.length === 0) {
     return (
@@ -158,14 +224,28 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
 
   return (
     <div className="mt-6 lg:h-[calc(100vh-140px)] flex flex-col h-auto">
-      <div className="flex items-center justify-start mb-4 flex-shrink-0">
-        <div className="p-3 bg-white dark:bg-slate-800 rounded-lg shadow-md mr-4">
-          <Camera className="w-6 h-6 text-brand-blue-600 dark:text-brand-blue-400" />
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
+        <div className="flex items-center">
+          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg shadow-md mr-4">
+            <Camera className="w-6 h-6 text-brand-blue-600 dark:text-brand-blue-400" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">포토 스튜디오</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Nano Banana AI를 사용하여 나만의 항공기 사진을 촬영하세요.</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">포토 스튜디오</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Nano Banana AI를 사용하여 나만의 항공기 사진을 촬영하세요.</p>
-        </div>
+        <button
+          onClick={() => {
+            if (window.confirm('API 키를 초기화하시겠습니까? 다시 입력해야 합니다.')) {
+              handleClearKey();
+            }
+          }}
+          className="flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors"
+          title="API 키 재설정"
+        >
+          <Settings className="w-4 h-4 mr-2" />
+          API 키 재설정
+        </button>
       </div>
 
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6 lg:min-h-0">
@@ -197,8 +277,8 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                     key={scene.id}
                     onClick={() => setSelectedSceneId(scene.id)}
                     className={`px-3 py-2 text-sm rounded-md text-left transition-colors ${selectedSceneId === scene.id
-                        ? 'bg-brand-blue-600 text-white'
-                        : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600'
+                      ? 'bg-brand-blue-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600'
                       }`}
                   >
                     {scene.name}
@@ -216,8 +296,8 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                 <button
                   onClick={() => setFuselageFinish('paint')}
                   className={`flex-1 flex items-center justify-center py-1.5 text-sm font-medium rounded-md transition-all ${fuselageFinish === 'paint'
-                      ? 'bg-white dark:bg-slate-600 text-brand-blue-600 dark:text-brand-blue-400 shadow-sm'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    ? 'bg-white dark:bg-slate-600 text-brand-blue-600 dark:text-brand-blue-400 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                 >
                   <Palette size={14} className="mr-1.5" />
@@ -226,8 +306,8 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                 <button
                   onClick={() => setFuselageFinish('metallic')}
                   className={`flex-1 flex items-center justify-center py-1.5 text-sm font-medium rounded-md transition-all ${fuselageFinish === 'metallic'
-                      ? 'bg-white dark:bg-slate-600 text-amber-600 dark:text-amber-400 shadow-sm'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    ? 'bg-white dark:bg-slate-600 text-amber-600 dark:text-amber-400 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                 >
                   <Sparkles size={14} className="mr-1.5" />
@@ -243,8 +323,8 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                       key={color.id}
                       onClick={() => setSelectedFuselageColorId(color.id)}
                       className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform hover:scale-110 ${selectedFuselageColorId === color.id
-                          ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-transparent'
-                          : color.border
+                        ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-transparent'
+                        : color.border
                         }`}
                       style={{ backgroundColor: color.hex }}
                       title={color.name}
@@ -270,8 +350,8 @@ const PhotoStudioPage: React.FC<PhotoStudioPageProps> = ({ gameState }) => {
                     key={color.id}
                     onClick={() => setSelectedLiveryColorId(color.id)}
                     className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform hover:scale-110 ${selectedLiveryColorId === color.id
-                        ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-slate-600 dark:border-white'
-                        : 'border-transparent'
+                      ? 'ring-2 ring-brand-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-slate-600 dark:border-white'
+                      : 'border-transparent'
                       }`}
                     style={{ backgroundColor: color.hex }}
                     title={color.name}
